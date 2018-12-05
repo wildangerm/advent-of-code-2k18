@@ -6,8 +6,10 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -30,21 +32,6 @@ public class Day5 extends BaseDay {
 
 	}
 
-	private class ReactedComparator implements Comparator<Character> {
-
-		@Override
-		public int compare(Character c1, Character c2) {
-			List<Character> reducedList1 = new ArrayList<>(inputList);
-			reducedList1.removeAll(new ArrayList<>(Arrays.asList(c1, Character.toUpperCase(c1))));
-
-			List<Character> reducedList2 = new ArrayList<>(inputList);
-			reducedList2.removeAll(new ArrayList<>(Arrays.asList(c2, Character.toUpperCase(c2))));
-
-			return react(reducedList1).compareTo(react(reducedList2));
-		}
-
-	}
-
 	@Override
 	public void part2() {
 
@@ -54,12 +41,15 @@ public class Day5 extends BaseDay {
 			charSet.add(ch);
 		});
 
-		Character c = charSet.stream().min(new ReactedComparator()).get();
+		Map<Character, Integer> charReduced = new HashMap<>();
 
-		List<Character> reducedList = new ArrayList<>(inputList);
-		reducedList.removeAll(new ArrayList<>(Arrays.asList(c, Character.toUpperCase(c))));
+		charSet.forEach(cse -> {
+			List<Character> reduced = new ArrayList<>(inputList);
+			reduced.removeAll(new ArrayList<>(Arrays.asList(cse, Character.toUpperCase(cse))));
+			charReduced.put(cse, react(reduced));
+		});
 
-		int shortestPolymer = react(reducedList);
+		Integer shortestPolymer = charReduced.values().stream().min(Comparator.naturalOrder()).get();
 
 		System.out.println("shortest: " + shortestPolymer);
 	}
