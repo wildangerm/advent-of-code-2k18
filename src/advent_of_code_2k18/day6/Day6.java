@@ -18,17 +18,54 @@ public class Day6 extends BaseDay {
 
 	public Day6() {
 		readFile();
-		
+
 		int maxCoordX = inputList.stream().max((c1, c2) -> Integer.compare(c1.getX(), c2.getX())).get().getX();
 		int maxCoordY = inputList.stream().max((c1, c2) -> Integer.compare(c1.getY(), c2.getY())).get().getY();
 
-		grid = new int[maxCoordX][maxCoordY];
+		grid = new int[maxCoordX + 1][maxCoordY + 1];
 	}
 
 	@Override
 	public void part1() {
-		// TODO Auto-generated method stub
+		for (int x = 0; x < grid.length; x++) {
+			for (int y = 0; y < grid[0].length; y++) {
+				grid[x][y] = getClosestCoordinateID(x, y);
+			}
+		}
+		for (int y = 0; y < grid[0].length; y++) {
+			for (int x = 0; x < grid.length; x++) {
+				System.out.print(grid[x][y] + "\t");
+				if (x == grid.length - 1) {
+					System.out.println();
+				}
+			}
+		}
+		System.out.println();
+	}
 
+	private int getClosestCoordinateID(int x, int y) {
+
+		int min = Integer.MAX_VALUE;
+		int coordinateID = -1;
+
+		for (Coordinate coordinate : inputList) {
+			if (coordinate.getX() == x && coordinate.getY() == y) {
+				return coordinate.getID() * 100;
+			}
+			int dist = getDistToCoordinate(coordinate, x, y);
+			if (dist < min) {
+				min = dist;
+				coordinateID = coordinate.getID();
+			} else if (dist == min) {
+				coordinateID = -1;
+			}
+
+		}
+		return coordinateID;
+	}
+
+	private int getDistToCoordinate(Coordinate c, int x, int y) {
+		return Math.abs(c.getX() - x) + Math.abs(c.getY() - y);
 	}
 
 	@Override
@@ -38,7 +75,7 @@ public class Day6 extends BaseDay {
 	}
 
 	private void readFile() {
-		String pathString = getPathStringToInput("input.txt");
+		String pathString = getPathStringToInput("testinput.txt");
 
 		try (Stream<String> stream = Files.lines(Paths.get(pathString))) {
 			inputList = stream.map(line -> createCoordinateFromRegex(line)).collect(Collectors.toList());
