@@ -20,6 +20,7 @@ import advent_of_code_2k18.BaseDay;
 
 public class Day6 extends BaseDay {
 
+	private static final int SAFE_REGION_DISTANCE = 10000;
 	private List<Coordinate> inputList = new ArrayList<>();
 	private int[][] grid;
 
@@ -34,17 +35,18 @@ public class Day6 extends BaseDay {
 
 	@Override
 	public void part1() {
+		
 		for (int x = 0; x < grid.length; x++) {
 			for (int y = 0; y < grid[0].length; y++) {
 				grid[x][y] = getClosestCoordinateID(x, y);
 			}
 		}
-
-		printGrid();
-
+		
 		List<Coordinate> candidates = excludeInfinite();
 		
-		List<Integer> candidateIDs = candidates.stream().map(Coordinate::getID).collect(Collectors.toList());
+		List<Integer> candidateIDs = candidates.stream()
+												.map(Coordinate::getID)
+												.collect(Collectors.toList());
 
 		List<Integer> flatFilteredGrid = Arrays.stream(grid)
 												.flatMapToInt(x -> Arrays.stream(x))
@@ -66,8 +68,23 @@ public class Day6 extends BaseDay {
 
 	@Override
 	public void part2() {
-		// TODO Auto-generated method stub
-	
+		int safeRegionSize = 0;
+
+		for (int x = 0; x < grid.length; x++) {
+			for (int y = 0; y < grid[0].length; y++) {
+
+				int distanceSum = 0;
+
+				for (Coordinate c : inputList) {
+					distanceSum += getDistToCoordinate(c, x, y);
+				}
+				if (distanceSum < SAFE_REGION_DISTANCE) {
+					safeRegionSize++;
+				}
+			}
+		}
+		System.out.println("size of safe region: " + safeRegionSize);
+
 	}
 
 	private List<Coordinate> excludeInfinite() {
