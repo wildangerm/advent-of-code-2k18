@@ -20,7 +20,7 @@ import advent_of_code_2k18.BaseDay;
 
 public class Day6 extends BaseDay {
 
-	private static final int SAFE_REGION_DISTANCE = 10000;
+	private final int SAFE_REGION_DISTANCE = 10000;
 	private List<Coordinate> inputList = new ArrayList<>();
 	private int[][] grid;
 
