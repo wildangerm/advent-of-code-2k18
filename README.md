@@ -3,3 +3,5 @@
 I'm experimenting with Java8 (streams, lambdas).
 
 Also I'm doing Advent of Code in Kotlin too, you can find the repository [here.](https://github.com/wildangerm/advent-of-code-2k18-kt)
+
+Check out my page for more projects/updates/info: [wildangerm.github.io](https://wildangerm.github.io/)
